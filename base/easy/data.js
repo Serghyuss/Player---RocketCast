@@ -1,7 +1,6 @@
 window.audios = [
     {
-      title:
-        "Como começei a programar / Por que criamos a Rocketseat / Nossa Stack",
+      title: "Como começei a programar / Por que criamos a Rocketseat / Nossa Stack",
       artist: "Diego Fernandes",
       cover: "como-comecei.jpg",
       file: "como-comecei.mp3"
