@@ -1,19 +1,49 @@
-window.player = {
-    cover: document.querySelector(".card-image"),
-    title: document.querySelector(".card-content h5"),
-    artist: document.querySelector(".artist"),
-    audio: document.querySelector("audio"),
+import audios from "./data.js";
+import { path } from "./utils.js";
+import elements from "./playerElements.js";
+export default {
     audioData: audios,
     currentAudio: {},
     currentPlaying: 0,
+    isPlaying: false,
     start() {  
+        elements.get.call(this);
+        elements.actions.call(this);
+
         this.update();
         this.audio.onended = () => this.next();
+    },
+    play() {
+        this.isPlaying = true;
+        this.audio.play();
+        this.playPause.innerText = "pause";
+    },
+    pause() {
+        this.isPlaying = false;
+        this.audio.pause();
+        this.playPause.innerText = "play_arrow";
+    },
+    togglePlayPause() {
+        if (this.isPlaying) {
+            this.pause();
+        } else {
+            this.play();
+        }
+    },
+    toggleMute() {
+        this.audio.muted = !this.audio.muted;
+        this.mute.innerText = this.audio.muted ? "volume_down" : "volume_up";
     },
     next() {
         this.currentPlaying++;
         if (this.currentPlaying == this.audioData.length) this.restart();
         this.update();
+    },
+    setVolume(value) {
+        this.audio.volume = value / 100;
+    },
+    setSeek(value) {
+        this.audio.currentTime = value;
     },
     update() {
         this.currentAudio = this.audioData[this.currentPlaying];
@@ -22,7 +52,8 @@ window.player = {
         }') no-repeat center center / cover`;
         this.title.innerText = this.currentAudio.title;
         this.artist.innerText = this.currentAudio.artist;
-        this.audio.src = path(this.currentAudio.file);
+        elements.createAudioElement.call(this, path(this.currentAudio.file));
+        this.seekbar.max = this.audio.duration;
     },
     restart() {
         this.currentPlaying = 0;
